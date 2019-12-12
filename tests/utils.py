@@ -12,12 +12,12 @@ def null_context():
 
 def find_binary(name: str) -> str:
     candidates = [
-        os.environ.get(f'{name.upper().replace("-", "_")}_BINARY', ""),
+        os.environ.get('{}_BINARY', "".format(name.upper().replace("-", "_"))),
         name,
-        f"{name}.exe",
+        "{}.exe".format(name),
     ]
     for candidate in candidates:
         path = which(candidate)
         if path:
             return path
-    raise pytest.skip(f"Could not find driver {name!r}, skipping")
+    raise pytest.skip("Could not find driver {}, skipping".format(repr(name)))

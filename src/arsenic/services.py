@@ -82,9 +82,9 @@ class Geckodriver(Service):
             version = StrictVersion(version_str)
             if version < StrictVersion("0.16.1"):
                 raise ValueError(
-                    f"Geckodriver version {version_str} is too old. 0.16.1 or "
-                    f"higher is required. To disable version checking, set "
-                    f"`version_check` to `False`."
+                    "Geckodriver version {} is too old. 0.16.1 or "
+                    "higher is required. To disable version checking, set "
+                    "`version_check` to `False`.".format(version_str)
                 )
 
     async def start(self):
@@ -92,7 +92,7 @@ class Geckodriver(Service):
         await self._check_version()
         return await subprocess_based_service(
             [self.binary, "--port", str(port)],
-            f"http://localhost:{port}",
+            "http://localhost:{}".format(port),
             self.log_file,
         )
 
@@ -105,7 +105,7 @@ class Chromedriver(Service):
     async def start(self):
         port = free_port()
         return await subprocess_based_service(
-            [self.binary, f"--port={port}"], f"http://localhost:{port}", self.log_file
+            [self.binary, "--port={}".format(port)], "http://localhost:{}".format(port), self.log_file
         )
 
 
@@ -123,10 +123,10 @@ def auth_or_string(value):
 
 @attr.s
 class Remote(Service):
-    url: str = attr.ib()
-    auth: Optional[Auth] = attr.ib(
+    url = attr.ib()  # type: str
+    auth = attr.ib(
         default=None, converter=attr.converters.optional(auth_or_string)
-    )
+    )  # type: Optional[Auth]
 
     async def start(self):
         closers = []
@@ -151,8 +151,8 @@ class PhantomJS(Service):
     async def start(self):
         port = free_port()
         return await subprocess_based_service(
-            [self.binary, f"--webdriver={port}"],
-            f"http://localhost:{port}/wd/hub",
+            [self.binary, "--webdriver={}".format(port)],
+            "http://localhost:{}/wd/hub".format(port),
             self.log_file,
         )
 
@@ -166,7 +166,7 @@ class IEDriverServer(Service):
     async def start(self):
         port = free_port()
         return await subprocess_based_service(
-            [self.binary, f"/port={port}", f"/log-level={self.log_level}"],
-            f"http://localhost:{port}",
+            [self.binary, "/port={}".format(port), "/log-level={}".format(self.log_level)],
+            "http://localhost:{}".format(port),
             self.log_file,
         )

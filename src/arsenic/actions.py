@@ -16,15 +16,15 @@ class Action:
 
 class Tick:
     def __init__(self, *actions: Action):
-        self.actions: Dict["Device", "Action"] = {
+        self.actions = {
             action.source: action for action in actions
-        }
+        }  # type: Dict["Device", "Action"]
 
     def __and__(self, other: "Tick") -> "Tick":
         overlap = set(self.actions.keys()) & set(other.actions.keys())
         if overlap:
             raise ValueError(
-                f"Devices {overlap} have more than one action in this tick"
+                "Devices {} have more than one action in this tick".format(overlap)
             )
         return Tick(*self.actions.values(), *other.actions.values())
 
@@ -53,13 +53,13 @@ class Button(Enum):
 
 
 class Device(metaclass=abc.ABCMeta):
-    type: DeviceType = abc.abstractproperty()
+    type = abc.abstractproperty()  # type: DeviceType
 
     def __init__(self, device_id: Optional[str] = None):
         self.device_id = device_id
 
     def info(self, index: int) -> Dict[str, Any]:
-        device_id = self.device_id or f"{self.type.value}{index}"
+        device_id = self.device_id or "{}{}".format(self.type.value, index)
         return {"id": device_id, "type": self.type.value}
 
     def _tick(self, **payload: Any) -> Tick:
@@ -71,7 +71,7 @@ class Device(metaclass=abc.ABCMeta):
 
 class Pointer(Device, metaclass=abc.ABCMeta):
     type = DeviceType.pointer
-    pointer_type: PointerType = abc.abstractproperty()
+    pointer_type = abc.abstractproperty()  # type: PointerType
 
     def info(self, index: int) -> Dict[str, Any]:
         return {

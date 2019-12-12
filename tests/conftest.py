@@ -2,10 +2,12 @@ import json
 import os
 from contextlib import contextmanager
 from subprocess import check_call
-from typing import Any, AsyncContextManager, Callable, Dict, Optional, Type
+from typing import Any, Callable, Dict, Optional, Type
+# from typing import AsyncContextManager
 
 import pytest
-from asyncio_extras import async_contextmanager
+from async_generator import async_generator, asynccontextmanager, yield_
+# from asyncio_extras import async_contextmanager
 from aiohttp.web import TCPSite, AppRunner
 
 from arsenic import Session, browsers, get_session, services
@@ -20,7 +22,7 @@ def local_session_factory(
     service: Type[services.Service],
     browser: Type[browsers.Browser],
     browser_opts: Optional[Dict[str, Any]] = None,
-) -> Callable[[str], AsyncContextManager[Session]]:
+):  # -> Callable[[str], AsyncContextManager[Session]]:
     browser_opts = browser_opts or {}
 
     def ctx(root_url: str):
@@ -84,7 +86,8 @@ def bsl_context():
         check_call(args + ["stop"])
 
 
-@async_contextmanager
+@asynccontextmanager
+@async_generator
 async def get_remote_session(root_url: str):
     if "REMOTE_BROWSER" not in os.environ:
         raise pytest.skip("No remote browser configured (REMOTE_BROWSER)")
@@ -102,7 +105,7 @@ async def get_remote_session(root_url: str):
             browser_cls(**remote_browser),
             root_url,
         ) as session:
-            yield session
+            await yield_(session)
 
 
 @pytest.fixture(
@@ -115,12 +118,33 @@ async def get_remote_session(root_url: str):
     ],
     ids=lambda func: func.__name__[4:],
 )
+# @asynccontextmanager
+@async_generator
 async def session(root_url, request) -> Session:
     async with request.param(root_url) as session:
-        yield session
+        await yield_(session)
+
+
+import asyncio
+
+
+available_loops = [asyncio.SelectorEventLoop]
+try:
+    available_loops.append(asyncio.ProactorEventLoop)
+except AttributeError:
+    pass
+
+
+@pytest.fixture(params=available_loops)
+def event_loop(request):
+    loop = request.param()
+    yield loop
+    loop.close()
 
 
 @pytest.fixture
+@asynccontextmanager
+@async_generator
 async def root_url(event_loop):
     application = build_app()
     runner = AppRunner(application)
@@ -131,6 +155,7 @@ async def root_url(event_loop):
         for socket in site._server.sockets:
             host, port = socket.getsockname()
             break
-        yield f"http://{host}:{port}"
+        url = "http://{}:{}".format(host, port)
+        await yield_(url)
     finally:
         await runner.cleanup()

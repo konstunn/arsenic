@@ -14,7 +14,7 @@ class SessionStartError(ArsenicError):
         self.error = error
         self.message = message
         self.response = response
-        super().__init__(f"{error}: {message}")
+        super().__init__("{}: {}".format(error, message))
 
 
 class OperationNotSupported(ArsenicError):
@@ -37,7 +37,7 @@ class ArsenicTimeout(ArsenicError):
     pass
 
 
-CODES: Dict[Union[str, int], Type[WebdriverError]] = {}
+CODES = {}  # type: Dict[Union[str, int], Type[WebdriverError]]
 
 
 def get(error_code: Union[str, int]) -> Type[WebdriverError]:
@@ -46,7 +46,7 @@ def get(error_code: Union[str, int]) -> Type[WebdriverError]:
 
 def create(error_name: str, *error_codes: int) -> Type[WebdriverError]:
     name = "".join(bit.capitalize() for bit in error_name.split(" "))
-    cls: Type[WebdriverError] = type(name, (WebdriverError,), {})
+    cls = type(name, (WebdriverError,), {})  # type: type[WebdriverError]
     CODES[error_name] = cls
     for code in error_codes:
         CODES[code] = cls

@@ -67,7 +67,7 @@ def strip_auth(url: str) -> str:
     pr = urlparse(url)
     safe_netloc = pr.hostname
     if pr.port:
-        safe_netloc = f"{safe_netloc}:{pr.port}"
+        safe_netloc = "{}:{}".format(safe_netloc, pr.port)
     return urlunparse(
         (pr.scheme, safe_netloc, pr.path, pr.params, pr.query, pr.fragment)
     )

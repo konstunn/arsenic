@@ -14,7 +14,7 @@ class SessionContext:
         self.driver = driver
         self.browser = browser
         self.bind = bind
-        self.session: Session = None
+        self.session = None  # type Session
 
     async def __aenter__(self) -> Session:
         self.session = await self.driver.new_session(self.browser, self.bind)
@@ -25,11 +25,12 @@ class SessionContext:
         self.session = None
 
 
-TClosers = List[Callable[..., Awaitable[None]]]
+# TClosers = List[Callable[..., Awaitable[None]]]
 
 
 class WebDriver:
-    def __init__(self, connection: Connection, closers: TClosers):
+    def __init__(self, connection: Connection, closers  # : TClosers
+                 ):
         self.connection = connection
         self.closers = closers
 
@@ -57,7 +58,7 @@ class WebDriver:
             )
         session_id = response["sessionId"]
         session = browser.session_class(
-            connection=self.connection.prefixed(f"/session/{session_id}"),
+            connection=self.connection.prefixed("/session/{}".format(session_id)),
             bind=bind,
             wait=self.wait,
             driver=self,
@@ -71,10 +72,10 @@ class WebDriver:
             await closer()
 
     async def wait(
-        self,
-        timeout: Union[float, int],
-        func: Callable[[], Awaitable[Any]],
-        *exceptions: Exception,
+            self,
+            timeout: Union[float, int],
+            func: Callable[[], Awaitable[Any]],
+            *exceptions: Exception
     ) -> Any:
         deadline = time.time() + timeout
         err = None

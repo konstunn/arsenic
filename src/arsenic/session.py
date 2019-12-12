@@ -20,7 +20,7 @@ def escape_value(value: str) -> str:
         parts = value.split('"')
         result = ["concat("]
         for part in parts:
-            result.append(f'"{part}"')
+            result.append('"{}"'.format(part))
             result.append(", '\"', ")
         result = result[0:-1]
         if value.endswith('"'):
@@ -28,9 +28,9 @@ def escape_value(value: str) -> str:
         else:
             return "".join(result[:-1]) + ")"
     elif '"' in value:
-        return f"'{value}'"
+        return "'{}'".format(value)
     else:
-        return f'"{value}"'
+        return '"{}"'.format(value)
 
 
 class RequestHelpers:
@@ -84,14 +84,14 @@ class Element(RequestHelpers):
         return await self._request(url="/enabled", method="GET")
 
     async def get_attribute(self, name: str) -> str:
-        return await self._request(url=f"/attribute/{name}", method="GET")
+        return await self._request(url="/attribute/{}".format(name), method="GET")
 
     async def get_css_value(self, name: str) -> str:
-        return await self._request(url=f"/css/{name}", method="GET")
+        return await self._request(url="/css/{}".format(name), method="GET")
 
     async def select_by_value(self, value: str):
         value = escape_value(value)
-        option = await self.get_element(f"option[value={value}]")
+        option = await self.get_element("option[value={}]".format(value))
         await option.click()
 
     async def get_element(
@@ -203,7 +203,7 @@ class Session(RequestHelpers):
         path: str = UNSET,
         domain: str = UNSET,
         secure: bool = UNSET,
-        expiry: int = UNSET,
+        expiry: int = UNSET
     ):
         cookie = {"name": name, "value": value}
         if path is not UNSET:
@@ -217,13 +217,13 @@ class Session(RequestHelpers):
         await self._request(url="/cookie", method="POST", data={"cookie": cookie})
 
     async def get_cookie(self, name: str):
-        return await self._request(url=f"/cookie/{name}", method="GET")
+        return await self._request(url="/cookie/{}".format(name), method="GET")
 
     async def get_all_cookies(self):
         return await self._request(url="/cookie", method="GET")
 
     async def delete_cookie(self, name: str):
-        await self._request(url=f"/cookie/{name}", method="DELETE")
+        await self._request(url="/cookie/{}".format(name), method="DELETE")
 
     async def delete_all_cookies(self):
         await self._request(url="/cookie", method="DELETE")
@@ -274,7 +274,7 @@ class Session(RequestHelpers):
 
     def create_element(self, element_id):
         return self.element_class(
-            element_id, self.connection.prefixed(f"/element/{element_id}"), self
+            element_id, self.connection.prefixed("/element/{}".format(element_id)), self
         )
 
     async def get_window_handles(self):
@@ -310,13 +310,13 @@ class CompatSession(CompatRequestHelpers, Session):
 
     async def set_window_size(self, width: int, height: int, handle: str = "current"):
         return await self._request(
-            url=f"/window/{handle}/size",
+            url="/window/{}/size".format(handle),
             method="POST",
             data={"width": width, "height": height},
         )
 
     async def get_window_size(self, handle: str = "current"):
-        return await self._request(url=f"/window/{handle}/size", method="GET")
+        return await self._request(url="/window/{}/size".format(handle), method="GET")
 
     async def get_window_handles(self):
         return await self._request(url="/window_handles", method="GET")
@@ -364,7 +364,7 @@ def _pointer_move(device, action):
     elif constants.WEB_ELEMENT in origin:
         data = {"element": origin[constants.WEB_ELEMENT]}
     else:
-        raise OperationNotSupported(f"Cannot move using origin {origin}")
+        raise OperationNotSupported("Cannot move using origin {}".format(origin))
     return url, "POST", data
 
 
@@ -417,7 +417,7 @@ def transform_legacy_actions(
             handler = legacy_actions[(device_type, action_type)]
         except KeyError:
             raise OperationNotSupported(
-                f"Unsupported action {action_type} for device_type {device_type}"
+                "Unsupported action {} for device_type {}".format(action_type, device_type)
             )
         action = handler(device, action)
         if action is not None:

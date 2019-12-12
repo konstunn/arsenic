@@ -17,12 +17,12 @@ def px_to_int(value: str) -> int:
     if value.isdigit():
         return int(value)
     else:
-        raise ValueError(f"{original!r} is not an int or <int>px value")
+        raise ValueError("{!r} is not an int or <int>px value".format(repr(original)))
 
 
 @attr.s
 class Rect:
-    x: float = attr.ib()
-    y: float = attr.ib()
-    width: float = attr.ib()
-    height: float = attr.ib()
+    x = attr.ib()  # type: float
+    y = attr.ib()  # type: float
+    width = attr.ib()  # type: float
+    height = attr.ib()  # type: float

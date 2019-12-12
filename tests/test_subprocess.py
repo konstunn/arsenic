@@ -24,7 +24,12 @@ def event_loop(request):
     loop.close()
 
 
+from async_generator import async_generator, yield_, asynccontextmanager
+
+
 @pytest.fixture(params=[ThreadedSubprocessImpl, AsyncioSubprocessImpl])
+@asynccontextmanager
+@async_generator
 async def impl(event_loop, request):
     if sys.platform == "win32":
         if (
@@ -34,7 +39,7 @@ async def impl(event_loop, request):
             raise pytest.skip(
                 "Asyncio Subprocess doesn't work on win32 with selector event loop"
             )
-    yield request.param()
+    await yield_(request.param())
 
 
 async def test_run_process(impl):

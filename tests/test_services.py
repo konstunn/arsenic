@@ -13,7 +13,7 @@ pytestmark = [pytest.mark.asyncio]
 @pytest.mark.skipif(sys.platform == "win32", reason="Not supported on windows")
 async def test_geckodriver_version_ok(tmpdir, version, check, result):
     path = tmpdir.join("geckodriver")
-    path.write(f'#!{sys.executable}\nprint("geckodriver {version}")')
+    path.write('#!{}\nprint("geckodriver {}")'.format(sys.executable, version))
     path.chmod(0o755)
     driver = Geckodriver(binary=str(path), version_check=check)
     if result:

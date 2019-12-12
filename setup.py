@@ -1,7 +1,7 @@
 import os
 from setuptools import setup, find_packages
 
-with open(os.path.relpath(f"{__file__}/../README.md")) as f:
+with open(os.path.relpath("{}/../README.md".format(__file__))) as f:
     readme = f.read()
 
 setup(

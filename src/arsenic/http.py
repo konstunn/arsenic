@@ -17,6 +17,6 @@ class BasicAuth(Auth):
     password = attr.ib()
 
     def get_headers(self):
-        raw_token = f"{self.username}:{self.password}"
+        raw_token = "{}:{}".format(self.username, self.password)
         token = base64.b64encode(raw_token.encode("ascii")).decode("ascii")
-        return {"Authorization": f"Basic {token}"}
+        return {"Authorization": "Basic {}".format(token)}
