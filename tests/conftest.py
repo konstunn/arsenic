@@ -110,11 +110,11 @@ async def get_remote_session(root_url: str):
 
 @pytest.fixture(
     params=[
-        # get_ff_session,
+        get_ff_session,
         get_chrome_session,
-        # get_remote_session,
-        # get_phantomjs_session,
-        # get_ie_session,
+        get_remote_session,
+        get_phantomjs_session,
+        get_ie_session,
     ],
     ids=lambda func: func.__name__[4:],
 )
