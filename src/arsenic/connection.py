@@ -90,7 +90,7 @@ class Connection:
         async with self.session.request(
             url=full_url, method=method, data=body
         ) as response:
-            response_body = await response.read()
+            response_body = await response.text()
             try:
                 data = json.loads(response_body)
             except JSONDecodeError as exc:

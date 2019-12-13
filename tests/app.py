@@ -27,7 +27,7 @@ def render_view(jinja, template, process=None):
         data = {}
         if process is not None:
             data = await process(request)
-        response = await jinja.get_template(template).render_async(**data)
+        response = jinja.get_template(template).render(**data)  # FIXME: run in an executor?
         return Response(text=response, content_type="text/html")
 
     return view

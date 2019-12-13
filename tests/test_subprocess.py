@@ -28,7 +28,6 @@ from async_generator import async_generator, yield_, asynccontextmanager
 
 
 @pytest.fixture(params=[ThreadedSubprocessImpl, AsyncioSubprocessImpl])
-@asynccontextmanager
 @async_generator
 async def impl(event_loop, request):
     if sys.platform == "win32":

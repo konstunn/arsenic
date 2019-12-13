@@ -38,7 +38,7 @@ async def app(event_loop):
     try:
         for socket in server.sockets:
             host, port = socket.getsockname()
-        yield f"http://{host}:{port}"
+        yield "http://{}:{}".format(host, port)
     finally:
         server.close()
 

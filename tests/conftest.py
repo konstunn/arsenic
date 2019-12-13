@@ -110,15 +110,14 @@ async def get_remote_session(root_url: str):
 
 @pytest.fixture(
     params=[
-        get_ff_session,
+        # get_ff_session,
         get_chrome_session,
-        get_remote_session,
-        get_phantomjs_session,
-        get_ie_session,
+        # get_remote_session,
+        # get_phantomjs_session,
+        # get_ie_session,
     ],
     ids=lambda func: func.__name__[4:],
 )
-# @asynccontextmanager
 @async_generator
 async def session(root_url, request) -> Session:
     async with request.param(root_url) as session:
@@ -135,15 +134,7 @@ except AttributeError:
     pass
 
 
-@pytest.fixture(params=available_loops)
-def event_loop(request):
-    loop = request.param()
-    yield loop
-    loop.close()
-
-
 @pytest.fixture
-@asynccontextmanager
 @async_generator
 async def root_url(event_loop):
     application = build_app()
