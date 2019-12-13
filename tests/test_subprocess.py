@@ -4,6 +4,7 @@ import sys
 from asyncio import SelectorEventLoop
 
 import pytest
+from async_generator import async_generator, yield_
 
 from arsenic.subprocess import ThreadedSubprocessImpl, AsyncioSubprocessImpl
 
@@ -22,9 +23,6 @@ def event_loop(request):
     loop = request.param()
     yield loop
     loop.close()
-
-
-from async_generator import async_generator, yield_, asynccontextmanager
 
 
 @pytest.fixture(params=[ThreadedSubprocessImpl, AsyncioSubprocessImpl])

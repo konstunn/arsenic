@@ -2,12 +2,10 @@ import json
 import os
 from contextlib import contextmanager
 from subprocess import check_call
-from typing import Any, Callable, Dict, Optional, Type
-# from typing import AsyncContextManager
+from typing import Any, Dict, Optional, Type
 
 import pytest
 from async_generator import async_generator, asynccontextmanager, yield_
-# from asyncio_extras import async_contextmanager
 from aiohttp.web import TCPSite, AppRunner
 
 from arsenic import Session, browsers, get_session, services
@@ -22,7 +20,7 @@ def local_session_factory(
     service: Type[services.Service],
     browser: Type[browsers.Browser],
     browser_opts: Optional[Dict[str, Any]] = None,
-):  # -> Callable[[str], AsyncContextManager[Session]]:
+):
     browser_opts = browser_opts or {}
 
     def ctx(root_url: str):
@@ -122,16 +120,6 @@ async def get_remote_session(root_url: str):
 async def session(root_url, request) -> Session:
     async with request.param(root_url) as session:
         await yield_(session)
-
-
-import asyncio
-
-
-available_loops = [asyncio.SelectorEventLoop]
-try:
-    available_loops.append(asyncio.ProactorEventLoop)
-except AttributeError:
-    pass
 
 
 @pytest.fixture

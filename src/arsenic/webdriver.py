@@ -25,9 +25,6 @@ class SessionContext:
         self.session = None
 
 
-# TClosers = List[Callable[..., Awaitable[None]]]
-
-
 class WebDriver:
     def __init__(self, connection: Connection, closers  # : TClosers
                  ):
@@ -72,10 +69,10 @@ class WebDriver:
             await closer()
 
     async def wait(
-            self,
-            timeout: Union[float, int],
-            func: Callable[[], Awaitable[Any]],
-            *exceptions: Exception
+        self,
+        timeout: Union[float, int],
+        func: Callable[[], Awaitable[Any]],
+        *exceptions: Exception
     ) -> Any:
         deadline = time.time() + timeout
         err = None
