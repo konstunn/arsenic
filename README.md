@@ -13,6 +13,13 @@ Asynchronous webdriver client built on asyncio.
 The Work In Progress on backporting to Python 3.5 is in develop branch as for now.
 
 
+# Installation
+
+```
+pip install git+https://github.com/konstunn/arsenic@develop
+```
+
+
 ## Quickstart
 
 Let's run a local Firefox instance.
