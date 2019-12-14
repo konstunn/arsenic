@@ -1,4 +1,4 @@
-# Async Webdriver (Python 3.5 backport - Work In Progress)
+# Async Webdriver (Python 3.5 backport)
 
 [![CircleCI](https://circleci.com/gh/HDE/arsenic/tree/master.svg?style=svg)](https://circleci.com/gh/HDE/arsenic/tree/master) [![Documentation Status](https://readthedocs.org/projects/arsenic/badge/?version=latest)](http://arsenic.readthedocs.io/en/latest/?badge=latest)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=MjJhTXF4TmFlMFc4b1NpMzVBODNpVXNXeE9yWHlqZFNVR1o4N0l5QVhmMD0tLU15R1VoYU1VbGJrM0FxZTFHSjhaWGc9PQ==--836b0ffba754cc76cb9671875a9bd7be134acb98)](https://www.browserstack.com/automate/public-build/MjJhTXF4TmFlMFc4b1NpMzVBODNpVXNXeE9yWHlqZFNVR1o4N0l5QVhmMD0tLU15R1VoYU1VbGJrM0FxZTFHSjhaWGc9PQ==--836b0ffba754cc76cb9671875a9bd7be134acb98)
@@ -10,10 +10,14 @@
 
 Asynchronous webdriver client built on asyncio.
 
-The Work In Progress on backporting to Python 3.5 is in develop branch as for now.
+Backport to Python 3.5 is in develop branch as for now.
+
+## History
+
+I have a project on Python 3.5, so I had choice to migrate the project on Python 3.6 with all the infrastructure. The project was a piece of software for some kind of ATMs. There was 1000+ of ATMs so I've decided that as for now it was easier to backport arsenic from Python 3.6 to Python 3.5 rather than to migrate the project from Python 3.5 to Python 3.6.
 
 
-# Installation
+## Installation
 
 ```
 pip install git+https://github.com/konstunn/arsenic@develop
