@@ -10,11 +10,13 @@
 
 Asynchronous webdriver client built on asyncio.
 
-Backport to Python 3.5 is in develop branch as for now.
+**Backport to Python 3.5** is in develop branch as for now.
 
-## History
+## History of backport
 
-I have a project on Python 3.5, so I had choice to migrate the project on Python 3.6 with all the infrastructure. The project was a piece of software for some kind of ATMs. There was 1000+ of ATMs so I've decided that as for now it was easier to backport arsenic from Python 3.6 to Python 3.5 rather than to migrate the project from Python 3.5 to Python 3.6.
+I had a project written in Python 3.5, but wanted to use arsenic which requires Python 3.6+, so I had choice to migrate the infrastucture to Python 3.6 or to backport arsenic to Python 3.5. 
+
+The project was a piece of software for some kind of ATMs. There was 1000+ of ATMs so I've decided that so far then it was easier to backport arsenic from Python 3.6 to Python 3.5 rather than to migrate the infrastructure from Python 3.5 to Python 3.6.
 
 
 ## Installation
