@@ -155,6 +155,7 @@
         :param str domain: Optional, keyword-only domain of the cookie.
         :param bool secure: Optional, keyword-only secure flag of the cookie.
         :param int expiry: Optional, keyword-only expiration of the cookie.
+        :param bool httponly: Optional, keyword-only httponly flag of the cookie.
         :rtype: None
 
     .. py:method:: get_cookie(name)
@@ -255,9 +256,3 @@
     .. py:method:: close
 
         Coroutine to close this session.
-
-
-
-.. py:method:: CompatSession
-
-    :py:class:`Session` subclass for webdrivers that do not support certain APIs.
